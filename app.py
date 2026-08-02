@@ -429,7 +429,8 @@ with left:
         type=[
             "png",
             "jpg",
-            "jpeg"
+            "jpeg",
+            "tif"
         ]
 
     )
