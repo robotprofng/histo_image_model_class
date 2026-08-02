@@ -626,6 +626,7 @@ with right:
             st.write("")
 
 
+            
             st.subheader(
             "Confidence Level"
             )
@@ -641,7 +642,6 @@ df = pd.DataFrame({
     "Probability": prediction[0][:len(classes)]
 })
         
-
 
             st.subheader(
             "Prediction Distribution"
