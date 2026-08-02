@@ -74,9 +74,7 @@ st.markdown("""
 
 @st.cache_resource
 def load_model():
-    return keras.models.load_model(
-        "histo_image_classifier_builtmodel.keras"
-    )
+    return keras.models.load_model("oral_pathology_model_tf215.h5")
 
 model = load_model()
 
@@ -303,7 +301,7 @@ st.divider()
 st.markdown("""
 <div class="footer">
 
-Developed by <b>Dr. Irene Udebuana</b><br>
+Developed by <b>Dr. Akinshipo & Dr. Udebuana </b><br>
 
 RobotProf AI • TensorFlow • Streamlit • Deep Learning
 
