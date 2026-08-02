@@ -502,7 +502,7 @@ with left:
 
         image,
 
-        use_container_width=True,
+        width="stretch",
 
         caption="Uploaded Histology Image"
 
@@ -635,20 +635,11 @@ with right:
             confidence
             )
 
-
-            df=pd.DataFrame(
-
-            {
-
-            "Class":
-            classes,
-
-            "Probability":
-            prediction[0]
-
-            }
-
-            )
+confidence_df = pd.DataFrame({
+    "Class": classes,
+    "Probability": prediction[0].tolist()
+})
+           
 
 
             st.subheader(
