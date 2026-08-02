@@ -1,312 +1,909 @@
+# ============================================================
+# HistoAI - Oral Pathology AI Classifier
+# Developed by Dr. Irene Udebuana | RobotProf AI
+# ============================================================
+
+
 import streamlit as st
 from tensorflow import keras
 from PIL import Image
 import numpy as np
 import pandas as pd
+import time
 
-# ----------------------------------------------------
+
+# ============================================================
 # PAGE CONFIGURATION
-# ----------------------------------------------------
+# ============================================================
 
 st.set_page_config(
-    page_title="AI Histopathology Image Classifier",
-    page_icon="🦷",
+    page_title="HistoAI | Oral Pathology AI",
+    page_icon="🔬",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# ----------------------------------------------------
-# CUSTOM CSS
-# ----------------------------------------------------
+
+# ============================================================
+# DARK BLUE PREMIUM UI
+# ============================================================
+
 
 st.markdown("""
+
 <style>
 
-.main{
-    background-color:#f5f7fa;
+
+/* MAIN BACKGROUND */
+
+.stApp {
+
+background:
+linear-gradient(
+135deg,
+#020617,
+#0f172a,
+#172554
+);
+
+color:white;
+
 }
 
-.title{
-    text-align:center;
-    font-size:42px;
-    font-weight:bold;
-    color:#004080;
+
+/* ALL TEXT */
+
+html, body, [class*="css"] {
+
+color:white;
+
+font-family:
+"Inter",
+Arial,
+sans-serif;
+
 }
 
-.subtitle{
-    text-align:center;
-    font-size:18px;
-    color:gray;
+
+
+/* SIDEBAR */
+
+section[data-testid="stSidebar"] {
+
+background:
+
+linear-gradient(
+180deg,
+#020617,
+#0b1f44
+);
+
 }
 
-.result{
-    background:#E8F5E9;
-    padding:20px;
-    border-radius:15px;
-    border-left:8px solid green;
+
+
+/* HEADINGS */
+
+h1,h2,h3,h4 {
+
+color:white !important;
+
 }
 
-.info{
-    background:#F8F9FA;
-    padding:18px;
-    border-radius:10px;
+
+
+/* HERO */
+
+.hero {
+
+background:
+
+linear-gradient(
+135deg,
+#1e40af,
+#0f766e
+);
+
+padding:45px;
+
+border-radius:25px;
+
+text-align:center;
+
+box-shadow:
+0 20px 50px rgba(0,0,0,0.5);
+
+margin-bottom:35px;
+
 }
 
-.warning{
-    background:#FFF3CD;
-    padding:15px;
-    border-radius:10px;
-    border-left:6px solid orange;
+
+.hero h1 {
+
+font-size:48px;
+
+font-weight:800;
+
 }
 
-.footer{
-    text-align:center;
-    color:gray;
-    font-size:14px;
+
+.hero p {
+
+font-size:20px;
+
+color:#e0f2fe;
+
 }
+
+
+
+
+/* CARDS */
+
+.card {
+
+background:
+
+rgba(255,255,255,0.08);
+
+backdrop-filter:blur(15px);
+
+padding:30px;
+
+border-radius:25px;
+
+border:
+
+1px solid rgba(255,255,255,0.15);
+
+box-shadow:
+
+0 15px 40px rgba(0,0,0,0.4);
+
+}
+
+
+
+
+/* METRIC CARDS */
+
+.metric {
+
+background:
+
+rgba(255,255,255,0.1);
+
+padding:25px;
+
+border-radius:20px;
+
+text-align:center;
+
+border:
+
+1px solid rgba(255,255,255,0.2);
+
+}
+
+
+.metric h2 {
+
+font-size:35px;
+
+}
+
+
+
+.metric p {
+
+color:#cbd5e1;
+
+}
+
+
+
+/* RESULT */
+
+.success-box {
+
+background:
+
+linear-gradient(
+135deg,
+#065f46,
+#047857
+);
+
+padding:30px;
+
+border-radius:25px;
+
+text-align:center;
+
+box-shadow:
+0 10px 30px rgba(0,0,0,0.4);
+
+}
+
+
+
+.success-box h1 {
+
+font-size:40px;
+
+}
+
+
+
+/* WARNING */
+
+.warning {
+
+background:
+
+rgba(245,158,11,0.15);
+
+border-left:
+
+8px solid #f59e0b;
+
+padding:25px;
+
+border-radius:20px;
+
+}
+
+
+
+/* BUTTON */
+
+.stButton button {
+
+
+background:
+
+linear-gradient(
+90deg,
+#2563eb,
+#06b6d4
+);
+
+
+color:white;
+
+font-weight:bold;
+
+font-size:18px;
+
+height:55px;
+
+border-radius:15px;
+
+border:none;
+
+width:100%;
+
+
+}
+
+
+
+.stButton button:hover {
+
+transform:scale(1.03);
+
+}
+
+
+
+
+/* UPLOADER */
+
+[data-testid="stFileUploader"] {
+
+background:
+rgba(255,255,255,0.05);
+
+padding:15px;
+
+border-radius:20px;
+
+}
+
+
+
+.footer {
+
+text-align:center;
+
+color:#94a3b8;
+
+font-size:14px;
+
+}
+
+
 
 </style>
+
+
 """, unsafe_allow_html=True)
 
-# ----------------------------------------------------
+
+
+
+# ============================================================
 # LOAD MODEL
-# ----------------------------------------------------
+# ============================================================
+
 
 @st.cache_resource
+
 def load_model():
-    return keras.models.load_model("oral_pathology_model_tf215.h5")
+
+    model = keras.models.load_model(
+        "oral_pathology_model_tf215.h5"
+    )
+
+    return model
+
+
 
 model = load_model()
 
-# ----------------------------------------------------
-# CLASS NAMES
-# ----------------------------------------------------
 
-class_names = [
-    "AMELOBLASTOMA",
-    "AOT"
+
+
+# ============================================================
+# CLASS LABELS
+# ============================================================
+
+
+classes = [
+
+"Ameloblastoma",
+
+"Adenomatoid Odontogenic Tumour (AOT)"
+
 ]
 
-# ----------------------------------------------------
+
+
+
+# ============================================================
 # SIDEBAR
-# ----------------------------------------------------
+# ============================================================
 
-st.sidebar.title("🦷 Model Information")
 
-st.sidebar.markdown("""
-### About
+with st.sidebar:
 
-This AI application classifies oral histopathological images into:
 
-✅ Ameloblastoma
+    st.markdown(
 
-✅ Adenomatoid Odontogenic Tumour (AOT)
+    """
 
----
+    # 🔬 HistoAI
 
-### Model
+    ## Oral Pathology AI Assistant
 
-- Transfer Learning
-- TensorFlow / Keras
-- RGB Images
-- Image Size: **224 × 224**
 
----
+    ---
 
-### Output
+    ### MODEL
 
-- Predicted Class
-- Confidence Score
-- Probability Distribution
+    🧠 Deep Learning CNN
 
----
+    ⚙ TensorFlow/Keras
 
-### Clinical Notice
+    📌 Transfer Learning
 
-This AI model is intended for research,
-education and demonstration purposes only.
 
-It should **NOT** replace expert
-histopathological diagnosis.
-""")
+    ### IMAGE INPUT
 
-# ----------------------------------------------------
-# HEADER
-# ----------------------------------------------------
+    🖼 Histopathology Images
 
-st.markdown('<p class="title">🦷 AI Histopathology Image Classifier</p>',
-unsafe_allow_html=True)
+    📐 224 × 224 RGB
 
-st.markdown(
-'<p class="subtitle">Deep Learning-Based Classification of Oral Histopathology Images</p>',
-unsafe_allow_html=True)
 
-st.divider()
+    ### CLASSIFICATION
 
-# ----------------------------------------------------
-# TWO COLUMN LAYOUT
-# ----------------------------------------------------
+    🔬 Ameloblastoma
 
-col1, col2 = st.columns([1,1])
+    🔬 AOT
 
-with col1:
 
-    st.subheader("📤 Upload Histopathology Image")
+    ---
 
-    uploaded_file = st.file_uploader(
-        "Supported formats: JPG, JPEG, PNG",
-        type=["jpg","jpeg","png"]
+    Developed by:
+
+    **Dr. Irene Udebuana**
+
+    RobotProf AI
+
+
+    """
+
     )
 
-    if uploaded_file is not None:
 
-        image = Image.open(uploaded_file)
 
-        st.image(
-            image,
-            caption="Uploaded Histopathology Image",
-            use_container_width=True
-        )
 
-with col2:
 
-    st.subheader("📊 Prediction Results")
+# ============================================================
+# HERO SECTION
+# ============================================================
 
-    if uploaded_file is not None:
 
-        if st.button("🔍 Analyze Image", use_container_width=True):
 
-            with st.spinner("Analyzing image..."):
+st.markdown(
 
-                img = image.resize((224,224))
+"""
 
-                img_array = np.array(img)
+<div class="hero">
 
-                img_array = np.expand_dims(img_array, axis=0)
 
-                img_array = img_array / 255.0
+<h1>
+🔬 HistoAI Oral Pathology Classifier
+</h1>
 
-                prediction = model.predict(img_array)
 
-                confidence = float(np.max(prediction))
+<p>
+Artificial Intelligence for Histopathological Image Classification
+</p>
 
-                predicted_class = class_names[np.argmax(prediction)]
-
-            st.success("Analysis Complete")
-
-            st.markdown(
-            f"""
-            <div class="result">
-
-            <h2>Prediction</h2>
-
-            <h1>{predicted_class}</h1>
-
-            <h3>Confidence: {confidence:.2%}</h3>
-
-            </div>
-            """,
-            unsafe_allow_html=True)
-
-            st.write("")
-
-            st.subheader("Confidence")
-
-            st.progress(confidence)
-
-            st.metric(
-                label="Confidence Score",
-                value=f"{confidence:.2%}"
-            )
-
-            st.write("")
-
-            st.subheader("Prediction Probabilities")
-
-            probs = prediction[0]
-
-            df = pd.DataFrame(
-                {
-                    "Class": class_names,
-                    "Probability": probs
-                }
-            ).set_index("Class")
-
-            st.bar_chart(df)
-
-            st.write("")
-
-            st.markdown("""
-            ### Clinical Interpretation
-
-            The uploaded histopathology image is most consistent with the predicted lesion shown above.
-
-            This prediction should always be interpreted alongside:
-
-            - Clinical examination
-            - Radiographic findings
-            - Histopathological review
-            - Specialist opinion
-            """)
-
-            with st.expander("🔬 AI Model Details"):
-
-                st.write("Model: TensorFlow / Keras")
-
-                st.write("Architecture: Transfer Learning")
-
-                st.write("Input Size: 224 × 224")
-
-                st.write("Color Channels: RGB")
-
-                st.write("Normalization: Pixel values divided by 255")
-
-                st.write("Classes:")
-
-                for c in class_names:
-                    st.write("-", c)
-
-# ----------------------------------------------------
-# DISCLAIMER
-# ----------------------------------------------------
-
-st.write("")
-
-st.markdown("""
-<div class="warning">
-
-### ⚠ Disclaimer
-
-This application is intended for educational,
-research and demonstration purposes only.
-
-Predictions generated by this AI system should
-not be used as the sole basis for diagnosis,
-clinical decision-making or treatment planning.
-
-All cases should be reviewed by qualified oral
-pathologists and healthcare professionals.
 
 </div>
-""",
-unsafe_allow_html=True)
 
-# ----------------------------------------------------
-# FOOTER
-# ----------------------------------------------------
+
+""",
+
+unsafe_allow_html=True
+
+)
+
+
+
+
+# ============================================================
+# DASHBOARD METRICS
+# ============================================================
+
+
+
+a,b,c,d = st.columns(4)
+
+
+
+metrics=[
+
+("🧠","AI MODEL","CNN"),
+
+("📷","INPUT","Histology"),
+
+("🎯","TASK","Classification"),
+
+("⚡","MODE","Real-time")
+
+]
+
+
+for col,data in zip(
+[a,b,c,d],
+metrics
+):
+
+    with col:
+
+        st.markdown(
+
+        f"""
+
+        <div class="metric">
+
+        <h2>{data[0]}</h2>
+
+        <b>{data[1]}</b>
+
+        <p>{data[2]}</p>
+
+
+        </div>
+
+        """,
+
+        unsafe_allow_html=True
+
+        )
+
+
+
 
 st.write("")
+
+
+
+# ============================================================
+# MAIN APPLICATION
+# ============================================================
+
+
+left,right = st.columns(
+[1,1]
+)
+
+
+
+
+with left:
+
+
+    st.markdown(
+    '<div class="card">',
+    unsafe_allow_html=True
+    )
+
+
+    st.subheader(
+    "📤 Upload Histopathology Image"
+    )
+
+
+    uploaded = st.file_uploader(
+
+    "Select image",
+
+    type=[
+        "png",
+        "jpg",
+        "jpeg"
+    ]
+
+    )
+
+
+
+    if uploaded:
+
+
+        image = Image.open(
+            uploaded
+        )
+
+
+        st.image(
+
+        image,
+
+        use_container_width=True,
+
+        caption="Uploaded Histology Image"
+
+        )
+
+
+    st.markdown(
+    "</div>",
+    unsafe_allow_html=True
+    )
+
+
+
+
+
+with right:
+
+
+    st.markdown(
+    '<div class="card">',
+    unsafe_allow_html=True
+    )
+
+
+    st.subheader(
+    "🤖 AI Prediction"
+    )
+
+
+    if uploaded:
+
+
+        if st.button(
+        "🚀 Analyze Image"
+        ):
+
+
+            with st.spinner(
+            "AI is examining microscopic patterns..."
+            ):
+
+
+                time.sleep(2)
+
+
+
+                img=image.resize(
+                (224,224)
+                )
+
+
+                img=np.array(
+                img
+                )
+
+
+                img=np.expand_dims(
+                img,
+                axis=0
+                )
+
+
+                img=img/255.0
+
+
+
+                prediction=model.predict(
+                img
+                )
+
+
+
+                confidence=float(
+                np.max(prediction)
+                )
+
+
+                index=np.argmax(
+                prediction
+                )
+
+
+                result=classes[index]
+
+
+
+            st.markdown(
+
+            f"""
+
+            <div class="success-box">
+
+            <h2>
+            AI Prediction
+            </h2>
+
+
+            <h1>
+            {result}
+            </h1>
+
+
+            <h2>
+
+            Confidence:
+
+            {confidence:.2%}
+
+            </h2>
+
+
+            </div>
+
+            """,
+
+            unsafe_allow_html=True
+
+            )
+
+
+            st.write("")
+
+
+            st.subheader(
+            "Confidence Level"
+            )
+
+
+            st.progress(
+            confidence
+            )
+
+
+            df=pd.DataFrame(
+
+            {
+
+            "Class":
+            classes,
+
+            "Probability":
+            prediction[0]
+
+            }
+
+            )
+
+
+            st.subheader(
+            "Prediction Distribution"
+            )
+
+
+            st.bar_chart(
+
+            df.set_index(
+            "Class"
+            )
+
+            )
+
+
+
+
+    else:
+
+
+        st.info(
+        "Upload a histology image to start AI analysis."
+        )
+
+
+
+    st.markdown(
+    "</div>",
+    unsafe_allow_html=True
+    )
+
+
+
+
+
+# ============================================================
+# MODEL INFORMATION
+# ============================================================
+
+
+st.write("")
+
+
+
+with st.expander(
+"🔬 View AI Architecture"
+):
+
+
+    st.write(
+
+    """
+
+    **Model:** Oral Pathology Deep Learning Classifier
+
+
+    **Framework:**
+
+    TensorFlow / Keras
+
+
+    **Input:**
+
+    224 × 224 RGB histopathology images
+
+
+    **Processing:**
+
+    - Image resizing
+
+    - Normalization
+
+    - CNN feature extraction
+
+    - Binary classification
+
+
+    **Predicted lesions:**
+
+    - Ameloblastoma
+
+    - Adenomatoid Odontogenic Tumour
+
+
+    """
+
+    )
+
+
+
+
+
+# ============================================================
+# DISCLAIMER
+# ============================================================
+
+
+st.markdown(
+
+"""
+
+<div class="warning">
+
+
+<h3>
+⚠ Medical Disclaimer
+</h3>
+
+
+This AI tool is designed for:
+
+✔ Research
+
+✔ Education
+
+✔ Demonstration
+
+
+It does not replace:
+
+- Histopathological diagnosis
+
+- Specialist review
+
+- Clinical judgement
+
+
+Final diagnosis must be performed by qualified healthcare professionals.
+
+
+</div>
+
+
+""",
+
+unsafe_allow_html=True
+
+)
+
+
+
+
+# ============================================================
+# FOOTER
+# ============================================================
+
+
 st.divider()
 
-st.markdown("""
+
+st.markdown(
+
+"""
+
 <div class="footer">
 
-Developed by <b>Dr. Akinshipo & Dr. Udebuana </b><br>
 
-RobotProf AI • TensorFlow • Streamlit • Deep Learning
+Developed by <b>Dr. Irene Udebuana</b>
+
+
+<br>
+
+RobotProf AI Healthcare Education
+
+
+<br><br>
+
+
+TensorFlow • Streamlit • Deep Learning
+
+
+<br>
 
 © 2026
 
+
 </div>
+
+
 """,
-unsafe_allow_html=True)
+
+unsafe_allow_html=True
+
+)
+
