@@ -635,11 +635,12 @@ with right:
             confidence
             )
 
-confidence_df = pd.DataFrame({
+
+df = pd.DataFrame({
     "Class": classes,
-    "Probability": prediction[0].tolist()
+    "Probability": prediction[0][:len(classes)]
 })
-           
+        
 
 
             st.subheader(
