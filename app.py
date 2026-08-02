@@ -66,20 +66,6 @@ sans-serif;
 
 
 
-/* SIDEBAR */
-
-section[data-testid="stSidebar"] {
-
-background:
-
-linear-gradient(
-180deg,
-#020617,
-#0b1f44
-);
-
-}
-
 
 
 /* HEADINGS */
@@ -420,7 +406,7 @@ metrics=[
 
 ("🧠","AI MODEL","CNN"),
 
-("📷","INPUT","Histology"),
+("📷","INPUT","Histology Image"),
 
 ("🎯","TASK","Classification"),
 
@@ -775,11 +761,7 @@ st.markdown(
 
 This AI tool is designed for:
 
-✔ Research
-
-✔ Education
-
-✔ Demonstration
+✔ Research          ✔ Education         ✔ Demonstration
 
 
 It does not replace:
@@ -826,7 +808,7 @@ Developed by <b>Dr. Akinshipo & Dr. Udebuana</b>
 
 <br>
 
-RobotProf AI Healthcare Education © 2026
+RobotProf © 2026   |   AI for Healthcare Education
 
 
 </div>
