@@ -24,17 +24,17 @@ st.set_page_config(
 )
 
 
+
 # ============================================================
 # DARK BLUE PREMIUM UI
 # ============================================================
 
 
-st.markdown("""
+st.markdown(
+"""
 
 <style>
 
-
-/* MAIN BACKGROUND */
 
 .stApp {
 
@@ -51,8 +51,6 @@ color:white;
 }
 
 
-/* ALL TEXT */
-
 html, body, [class*="css"] {
 
 color:white;
@@ -66,10 +64,6 @@ sans-serif;
 
 
 
-
-
-/* HEADINGS */
-
 h1,h2,h3,h4 {
 
 color:white !important;
@@ -78,12 +72,9 @@ color:white !important;
 
 
 
-/* HERO */
-
 .hero {
 
 background:
-
 linear-gradient(
 135deg,
 #1e40af,
@@ -104,6 +95,7 @@ margin-bottom:35px;
 }
 
 
+
 .hero h1 {
 
 font-size:48px;
@@ -111,6 +103,7 @@ font-size:48px;
 font-weight:800;
 
 }
+
 
 
 .hero p {
@@ -123,13 +116,9 @@ color:#e0f2fe;
 
 
 
-
-/* CARDS */
-
 .card {
 
 background:
-
 rgba(255,255,255,0.08);
 
 backdrop-filter:blur(15px);
@@ -139,24 +128,18 @@ padding:30px;
 border-radius:25px;
 
 border:
-
 1px solid rgba(255,255,255,0.15);
 
 box-shadow:
-
 0 15px 40px rgba(0,0,0,0.4);
 
 }
 
 
 
-
-/* METRIC CARDS */
-
 .metric {
 
 background:
-
 rgba(255,255,255,0.1);
 
 padding:25px;
@@ -166,10 +149,10 @@ border-radius:20px;
 text-align:center;
 
 border:
-
 1px solid rgba(255,255,255,0.2);
 
 }
+
 
 
 .metric h2 {
@@ -188,12 +171,9 @@ color:#cbd5e1;
 
 
 
-/* RESULT */
-
 .success-box {
 
 background:
-
 linear-gradient(
 135deg,
 #065f46,
@@ -213,24 +193,12 @@ box-shadow:
 
 
 
-.success-box h1 {
-
-font-size:40px;
-
-}
-
-
-
-/* WARNING */
-
 .warning {
 
 background:
-
 rgba(245,158,11,0.15);
 
 border-left:
-
 8px solid #f59e0b;
 
 padding:25px;
@@ -241,19 +209,14 @@ border-radius:20px;
 
 
 
-/* BUTTON */
-
 .stButton button {
 
-
 background:
-
 linear-gradient(
 90deg,
 #2563eb,
 #06b6d4
 );
-
 
 color:white;
 
@@ -269,7 +232,6 @@ border:none;
 
 width:100%;
 
-
 }
 
 
@@ -281,9 +243,6 @@ transform:scale(1.03);
 }
 
 
-
-
-/* UPLOADER */
 
 [data-testid="stFileUploader"] {
 
@@ -309,12 +268,12 @@ font-size:14px;
 }
 
 
-
 </style>
 
 
-""", unsafe_allow_html=True)
-
+""",
+unsafe_allow_html=True
+)
 
 
 
@@ -324,11 +283,11 @@ font-size:14px;
 
 
 @st.cache_resource
-
 def load_model():
 
     model = keras.models.load_model(
-        "oral_pathology_model_tf215.h5"
+        "oral_pathology_model_tf215.h5",
+        compile=False
     )
 
     return model
@@ -336,7 +295,6 @@ def load_model():
 
 
 model = load_model()
-
 
 
 
@@ -355,12 +313,9 @@ classes = [
 
 
 
-
-
 # ============================================================
 # HERO SECTION
 # ============================================================
-
 
 
 st.markdown(
@@ -368,7 +323,6 @@ st.markdown(
 """
 
 <div class="hero">
-
 
 <h1>
 🔬 HistoAI Classifier
@@ -382,7 +336,6 @@ Artificial Intelligence Classification of Oral Histopathology Images
 
 </div>
 
-
 """,
 
 unsafe_allow_html=True
@@ -391,15 +344,12 @@ unsafe_allow_html=True
 
 
 
-
 # ============================================================
 # DASHBOARD METRICS
 # ============================================================
 
 
-
 a,b,c,d = st.columns(4)
-
 
 
 metrics=[
@@ -434,7 +384,6 @@ metrics
 
         <p>{data[2]}</p>
 
-
         </div>
 
         """,
@@ -442,8 +391,6 @@ metrics
         unsafe_allow_html=True
 
         )
-
-
 
 
 st.write("")
@@ -455,39 +402,40 @@ st.write("")
 # ============================================================
 
 
-left,right = st.columns(
-[1,1]
-)
-
-
+left,right = st.columns([1,1])
+# ============================================================
+# IMAGE UPLOAD SECTION
+# ============================================================
 
 
 with left:
 
 
     st.markdown(
-    '<div class="card">',
-    unsafe_allow_html=True
+        '<div class="card">',
+        unsafe_allow_html=True
     )
 
 
     st.subheader(
-    "📤 Upload Histopathology Image"
+        "📤 Upload Histopathology Image"
     )
 
 
     uploaded = st.file_uploader(
 
-    "Select image",
+        "Select image",
 
-    type=[
-        "png",
-        "jpg",
-        "jpeg"
-    ]
+        type=[
+            "png",
+            "jpg",
+            "jpeg"
+        ]
 
     )
 
+
+    image = None
 
 
     if uploaded:
@@ -500,35 +448,40 @@ with left:
 
         st.image(
 
-        image,
+            image,
 
-        width="stretch",
+            width="stretch",
 
-        caption="Uploaded Histology Image"
+            caption="Uploaded Histology Image"
 
         )
 
 
     st.markdown(
-    "</div>",
-    unsafe_allow_html=True
+        "</div>",
+        unsafe_allow_html=True
     )
 
 
 
+
+
+# ============================================================
+# AI PREDICTION SECTION
+# ============================================================
 
 
 with right:
 
 
     st.markdown(
-    '<div class="card">',
-    unsafe_allow_html=True
+        '<div class="card">',
+        unsafe_allow_html=True
     )
 
 
     st.subheader(
-    "🤖 AI Prediction"
+        "🤖 AI Prediction"
     )
 
 
@@ -536,12 +489,12 @@ with right:
 
 
         if st.button(
-        "🚀 Analyze Image"
+            "🚀 Analyze Image"
         ):
 
 
             with st.spinner(
-            "AI is examining microscopic patterns..."
+                "AI is examining microscopic patterns..."
             ):
 
 
@@ -549,44 +502,59 @@ with right:
 
 
 
-                img=image.resize(
-                (224,224)
+                img = image.resize(
+                    (224,224)
                 )
 
 
-                img=np.array(
-                img
+                img = np.array(
+                    img
                 )
 
 
-                img=np.expand_dims(
-                img,
-                axis=0
+                # Ensure RGB format
+                if img.shape[-1] == 4:
+
+                    img = img[:,:,:3]
+
+
+                img = np.expand_dims(
+                    img,
+                    axis=0
                 )
 
 
-                img=img/255.0
+                img = img / 255.0
 
 
 
-                prediction=model.predict(
-                img
+                prediction = model.predict(
+                    img
                 )
 
 
 
-                confidence=float(
-                np.max(prediction)
+                probabilities = prediction[0]
+
+
+                confidence = float(
+                    np.max(probabilities)
                 )
 
 
-                index=np.argmax(
-                prediction
+                index = int(
+                    np.argmax(probabilities)
                 )
 
 
-                result=classes[index]
+                result = classes[index]
 
+
+
+
+            # -----------------------------
+            # RESULT DISPLAY
+            # -----------------------------
 
 
             st.markdown(
@@ -606,11 +574,8 @@ with right:
 
 
             <h2>
-
             Confidence:
-
             {confidence:.2%}
-
             </h2>
 
 
@@ -626,36 +591,68 @@ with right:
             st.write("")
 
 
-            
+
             st.subheader(
-            "Confidence Level"
+                "Confidence Level"
             )
 
 
             st.progress(
-            confidence
+                confidence
             )
 
 
-df = pd.DataFrame({
-    "Class": classes,
-    "Probability": prediction[0][:len(classes)]
-})
-        
+
+            # -----------------------------
+            # PROBABILITY TABLE
+            # -----------------------------
+
 
             st.subheader(
-            "Prediction Distribution"
+                "Prediction Distribution"
+            )
+
+
+            df = pd.DataFrame(
+
+                {
+
+                "Class":
+                classes[:len(probabilities)],
+
+
+                "Probability":
+                probabilities[:len(classes)]
+
+                }
+
+            )
+
+
+            df["Probability"] = (
+
+                df["Probability"] * 100
+
+            ).round(2)
+
+
+
+            st.dataframe(
+
+                df,
+
+                width="stretch"
+
             )
 
 
             st.bar_chart(
 
-            df.set_index(
-            "Class"
-            )
+                df.set_index(
+                    "Class"
+                )
 
             )
-
 
 
 
@@ -663,14 +660,13 @@ df = pd.DataFrame({
 
 
         st.info(
-        "Upload a histology image to start AI analysis."
+            "Upload a histology image to start AI analysis."
         )
 
 
-
     st.markdown(
-    "</div>",
-    unsafe_allow_html=True
+        "</div>",
+        unsafe_allow_html=True
     )
 
 
@@ -685,9 +681,8 @@ df = pd.DataFrame({
 st.write("")
 
 
-
 with st.expander(
-"🔬 View AI Architecture"
+    "🔬 View AI Architecture"
 ):
 
 
@@ -695,35 +690,35 @@ with st.expander(
 
     """
 
-    **Model:** Oral Pathology Deep Learning Classifier
+**Model:** Oral Pathology Deep Learning Classifier
 
 
-    **Framework:**
+**Framework:**
 
-    TensorFlow / Keras
-
-
-    **Input:**
-
-    224 × 224 RGB histopathology images
+TensorFlow / Keras
 
 
-    **Processing:**
+**Input:**
 
-    - Image resizing
-
-    - Normalization
-
-    - CNN feature extraction
-
-    - Binary classification
+224 × 224 RGB histopathology images
 
 
-    **Predicted lesions:**
+**Processing:**
 
-    - Ameloblastoma
+- Image resizing
 
-    - Adenomatoid Odontogenic Tumour
+- Normalization
+
+- CNN feature extraction
+
+- Binary classification
+
+
+**Predicted lesions:**
+
+- Ameloblastoma
+
+- Adenomatoid Odontogenic Tumour
 
 
     """
@@ -753,10 +748,16 @@ st.markdown(
 
 This AI tool is designed for:
 
-✔ Research          ✔ Education         ✔ Demonstration
+
+✔ Research
+
+✔ Education
+
+✔ Demonstration
 
 
 It does not replace:
+
 
 - Histopathological diagnosis
 
@@ -765,7 +766,7 @@ It does not replace:
 - Clinical judgement
 
 
-Final diagnosis must be performed by qualified Oral Pathologist.
+Final diagnosis must be performed by a qualified Oral Pathologist.
 
 
 </div>
@@ -800,7 +801,8 @@ Developed by <b>Dr. Akinshipo & Dr. Udebuana</b>
 
 <br>
 
-RobotProf © 2026   |   AI for Healthcare Education
+
+RobotProf © 2026 | AI for Healthcare Education
 
 
 </div>
@@ -811,4 +813,3 @@ RobotProf © 2026   |   AI for Healthcare Education
 unsafe_allow_html=True
 
 )
-
