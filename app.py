@@ -1,6 +1,6 @@
 # ============================================================
 # HistoAI - Oral Pathology AI Classifier
-# Developed by Dr. Irene Udebuana | RobotProf AI
+# Developed by Dr. Akinshipo & Dr. Udebuana | RobotProf AI
 # ============================================================
 
 
@@ -17,7 +17,7 @@ import time
 # ============================================================
 
 st.set_page_config(
-    page_title="HistoAI | Oral Pathology AI",
+    page_title="AI HISTOIMAGE CLASSIFIER MODEL",
     page_icon="🔬",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -370,64 +370,6 @@ classes = [
 
 
 
-# ============================================================
-# SIDEBAR
-# ============================================================
-
-
-with st.sidebar:
-
-
-    st.markdown(
-
-    """
-
-    # 🔬 HistoAI
-
-    ## Oral Pathology AI Assistant
-
-
-    ---
-
-    ### MODEL
-
-    🧠 Deep Learning CNN
-
-    ⚙ TensorFlow/Keras
-
-    📌 Transfer Learning
-
-
-    ### IMAGE INPUT
-
-    🖼 Histopathology Images
-
-    📐 224 × 224 RGB
-
-
-    ### CLASSIFICATION
-
-    🔬 Ameloblastoma
-
-    🔬 AOT
-
-
-    ---
-
-    Developed by:
-
-    **Dr. Irene Udebuana**
-
-    RobotProf AI
-
-
-    """
-
-    )
-
-
-
-
 
 # ============================================================
 # HERO SECTION
@@ -443,12 +385,12 @@ st.markdown(
 
 
 <h1>
-🔬 HistoAI Oral Pathology Classifier
+🔬 HistoAI Classifier
 </h1>
 
 
 <p>
-Artificial Intelligence for Histopathological Image Classification
+Artificial Intelligence Classification of Oral Histopathology Images
 </p>
 
 
@@ -849,7 +791,7 @@ It does not replace:
 - Clinical judgement
 
 
-Final diagnosis must be performed by qualified healthcare professionals.
+Final diagnosis must be performed by qualified Oral Pathologist.
 
 
 </div>
@@ -879,23 +821,12 @@ st.markdown(
 <div class="footer">
 
 
-Developed by <b>Dr. Irene Udebuana</b>
+Developed by <b>Dr. Akinshipo & Dr. Udebuana</b>
 
 
 <br>
 
-RobotProf AI Healthcare Education
-
-
-<br><br>
-
-
-TensorFlow • Streamlit • Deep Learning
-
-
-<br>
-
-© 2026
+RobotProf AI Healthcare Education © 2026
 
 
 </div>
