@@ -1,78 +1,52 @@
 # Histology Image Classifier
 
-An AI application developed for an oral pathology professor to explore machine learning for histopathological image classification.
+**Bringing machine learning into oral pathology through an interactive histology image classification application.**
 
-## About the Project
+## Project Overview
 
-I developed this application to make a machine learning model for histology image classification accessible through a simple, interactive interface. The project brings together software development and healthcare AI, exploring how machine learning models can be applied to image-based research in oral pathology.
+Developed for an oral pathology professor, this project explores the application of machine learning to histopathological image classification. I built a web application that integrates a trained model into an interactive interface, making it possible to test the model on histology images without interacting directly with the underlying code.
 
-## Live Demo
+The project sits at the intersection of dentistry, machine learning and software development, translating an AI model into an accessible tool for exploring healthcare research applications.
 
-- **[Try the application](https://histoimagemodelclass.streamlit.app/)**
-- **[View the source code](https://github.com/robotprofng/histo_image_model_class)**
+## Live Application
 
-## Tech Stack
+- **[Try the live demo](https://histoimagemodelclass.streamlit.app/)**
+- **[Explore the source code](https://github.com/robotprofng/histo_image_model_class)**
 
-- Python
-- Streamlit
-- TensorFlow / Keras
+## Technical Implementation
+
+- **Python** — application logic.
+- **TensorFlow / Keras** — machine learning model integration.
+- **Streamlit** — interactive web application.
+- **Model deployment** — making the trained model accessible through a browser-based interface.
 
 ## Run Locally
+
+Clone the repository:
 
 ```bash
 git clone https://github.com/robotprofng/histo_image_model_class.git
 cd histo_image_model_class
-
-python -m venv .venv
-source .venv/bin/activate
-
-pip install -r requirements.txt
-streamlit run app.py
 ```
 
-## Note on Clinical Use
-
-This is an experimental application for exploring histology image classification. It has not been established as a clinically validated diagnostic tool and should not replace assessment by a qualified pathologist.
-
----
-
-**Healthcare AI · Machine Learning · Application Development**# Histology Image Classifier
-
-An AI application developed for an oral pathology professor to explore machine learning for histopathological image classification.
-
-## About the Project
-
-I developed this application to make a machine learning model for histology image classification accessible through a simple, interactive interface. The project brings together software development and healthcare AI, exploring how machine learning models can be applied to image-based research in oral pathology.
-
-## Live Demo
-
-- **[Try the application](https://histoimagemodelclass.streamlit.app/)**
-- **[View the source code](https://github.com/robotprofng/histo_image_model_class)**
-
-## Tech Stack
-
-- Python
-- Streamlit
-- TensorFlow / Keras
-
-## Run Locally
+Create and activate a virtual environment:
 
 ```bash
-git clone https://github.com/robotprofng/histo_image_model_class.git
-cd histo_image_model_class
-
 python -m venv .venv
 source .venv/bin/activate
+```
 
+Install dependencies and launch the application:
+
+```bash
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Note on Clinical Use
+## Clinical Considerations
 
-This is an experimental application for exploring histology image classification. It has not been established as a clinically validated diagnostic tool and should not replace assessment by a qualified pathologist.
+This project is an experimental demonstration of machine learning applied to histology image classification. Its clinical performance has not been established, and the application is not intended for clinical diagnosis or to replace professional histopathological assessment.
 
 ---
 
-**Healthcare AI · Machine Learning · Application Development**
-# histo_image_model_class
+**Healthcare AI · Deep Learning · Python · Application Development**
